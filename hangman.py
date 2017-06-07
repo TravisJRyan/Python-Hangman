@@ -7,21 +7,26 @@ a list of words."""
 #The program isn't letting me open words.txt from the zip file. I guess it doesn't let you pull in files while it is zipped?
 #Drag the folder somewhere else if you're having trouble. Thanks!
 
-from graphics import *
-from time import *
+from graphics import * #zelle graphics library
+from time import * #time necessary for sleep 
 
-def DisplayWindow(window):
+def DisplayWindow(window): #main game window
+    #aesthetics: greeting texts
     GreetingText = Text( (Point(500, 200)), "Welcome to Hangman! Enter a file name.")
     GreetingText.setSize(30)
     E1 = Entry( (Point(500,500)), 10) 
     E1.setSize(30)
     E1.draw(window)
     GreetingText.draw(window)
+    
+    #conditions necessary for looping
     condition = False
     othercondition = False
+    
+    #waiting for a file from user
     while condition == False:
         try:
-            #3. Getting a filename from the user.
+            Getting a filename from the user.
             window.getMouse()
             filename = E1.getText()
             file = open(filename)
@@ -32,14 +37,14 @@ def DisplayWindow(window):
             condition = True
             if othercondition == True:
                 WrongText.undraw()
-        except FileNotFoundError:
-            #4. Checking to make sure the filename is valid.
+        except FileNotFoundError: #file not found exception
+            Checking to make sure the filename is valid.
             GreetingText.undraw()
             WrongText = Text( (Point(500, 200)), "The file does not exist. Enter another file name.")
             WrongText.setSize(30)
             WrongText.draw(window)
             othercondition = True
-    #5. Initializing necessary variables.
+    #Initializing necessary variables for game
     wrongCharacters = 0
     rightCharacters = 0
     wrongWords = 0
@@ -47,14 +52,17 @@ def DisplayWindow(window):
     timeshung = 0
     listofwords = ExtractData(stringofwords)
     E1.undraw()
+    #initialize letters
+    #oh god i did these individually
+    #this is a monstrosity
     for i in range(len(listofwords)):
         thirdcondition = False
         if thirdcondition == True:
             WrongText.undraw()
         alreadyguessed = []
-        #7A. Getting the current word 
+        #Getting the current word 
         CurrentWord = listofwords[i]
-        #7B. Creating 26 Text items.
+        #Creating 26 Text items.
         blackrectangle = Rectangle( (Point(50,450)), (Point(450,760)) )
         blackrectangle.setFill("black")
         blackrectangle.draw(window)
@@ -162,7 +170,8 @@ def DisplayWindow(window):
         letterZ.setSize(35)
         letterZ.setFill("white")
         letterZ.draw(window)
-        #7C. Creating an entry box and question mark.
+        
+        #Creating an entry box and question mark.
         questionmark = Text (Point(50, 250), "?")
         questionmark.setSize(35)
         questionmark.draw(window)
@@ -170,23 +179,28 @@ def DisplayWindow(window):
         E2.setSize(30)
         E2.setText("Enter a character or guess the word.")
         E2.draw(window)
-        #7D. Creating blank spaces the size of the current word.
+        
+        #Creating blank spaces the size of the current word.
         wordlength = len(CurrentWord)
         displayedtext = Text ( (Point (500, 100)), (" _" * wordlength) )
         displayedtext.setSize(30)
         displayedtext.draw(window)
-        #7F. Defining CurrentWrongWord
+        
+        #Defining CurrentWrongWord
         CurrentWrongWord = 0
-        #7G. Defining CurrentWordTry
+        
+        #Defining CurrentWordTry
         CurrentWordTry = True
-        #7H. Defining HangmanStage
+        
+        #Defining HangmanStage
         HangmanStage = 0
-        #7I. Making a while loop
+        
+        #loop through word tries
         while CurrentWordTry == True and CurrentWrongWord < 3 and HangmanStage <6:
-            #7I a. Letting the user input a character or word.
+            #7Letting the user input a character or word.
             window.getMouse()
             UserChoice = E2.getText()
-            #7I b. Checking if UserChoice is a word and comparing it with CurrentWord
+            #Checking if UserChoice is a word and comparing it with CurrentWord
             if len(UserChoice) > 1:
                 if UserChoice.upper() == CurrentWord.upper():
                     CurrentWordTry = False
@@ -213,8 +227,10 @@ def DisplayWindow(window):
                         errormessage.draw(window)
                         sleep(2)
                         errormessage.undraw()
-            #7I c. Calling the Lookup function
+                        
+            # Calling the Lookup function
             else:
+                #wow this is a tragedy. i will fix this one day
                 if Lookup(CurrentWord, UserChoice) == False:
                     HangmanStage += 1
                     wrongCharacters += 1
@@ -343,7 +359,7 @@ def DisplayWindow(window):
                         yellowrectangle.setWidth(0)
                         yellowrectangle.draw(window)
                         sleep(2)
-                    thirdcondition = True
+                    thirdcondition = True #i knew nothing of OOP when i wrote this i swear
                     if UserChoice == "A" or UserChoice == "a":
                         letterA.setFill("green")
                         letterA.undraw()
@@ -450,7 +466,7 @@ def DisplayWindow(window):
         else:
             displayedtext.undraw()
         E2.undraw()
-    #8. Clearing the screen and displaying statistics
+    #Clearing the screen and displaying statistics
     closingyellowrectangle = Rectangle( (Point(0,0)), (Point(1000,1000)))
     closingyellowrectangle.setFill(color_rgb(249,255,82))
     closingyellowrectangle.setWidth(0)
@@ -483,11 +499,13 @@ def DisplayWindow(window):
     window.getMouse()
     window.close()
 
+    #return list of strings
 def ExtractData(stringofwords):
-    #6. Splitting the string of words into a list
+    #Splitting the string of words into a list
     mylist = stringofwords.split()
     return mylist
 
+    #lookup function checks if character is in word
 def Lookup(word, character):
     mylist = []
     wordupper = word.upper()
@@ -495,6 +513,7 @@ def Lookup(word, character):
     if characterupper not in wordupper:
         return False
 
+    #makes a new string for display on screen based on guessed letters
 def MakeNewString(word, alreadyguessed):
     newstring = ""
     for i in range(len(word)):
@@ -504,6 +523,7 @@ def MakeNewString(word, alreadyguessed):
             newstring+=(" _")
     return newstring
 
+    #update hangman image on screen
 def DisplayHangmanStage(stage, window):
     if stage == 1:
         stage1 = Image( (Point(725, 715)), "Stage1.gif" )
@@ -529,11 +549,14 @@ def DisplayHangmanStage(stage, window):
         yellowrectangle.setWidth(0)
         yellowrectangle.draw(window)
     
+    #main function calls game window
 def main():
-    #1. Creating the graphics window.
+    #Creating the graphics window.
     window = GraphWin("Hangman Program",1000,1000)
     window.setBackground(color_rgb(249,255,82))
-    #2. Displaying the window via the DisplayWindow function.
+    #Displaying the window via the DisplayWindow function.
     DisplayWindow(window)
     
 main()
+
+#I sincerely apologize for this code. It was my first project and I will fix it one day.
