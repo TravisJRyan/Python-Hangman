@@ -4,9 +4,6 @@ Finished on April 24, 2016 at 11:46 AM
 Program allows the user to play hangman from an inputted file containing
 a list of words."""
 
-#The program isn't letting me open words.txt from the zip file. I guess it doesn't let you pull in files while it is zipped?
-#Drag the folder somewhere else if you're having trouble. Thanks!
-
 from graphics import * #zelle graphics library
 from time import * #time necessary for sleep 
 
