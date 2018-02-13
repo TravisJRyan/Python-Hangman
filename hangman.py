@@ -23,7 +23,6 @@ def DisplayWindow(window): #main game window
     #waiting for a file from user
     while condition == False:
         try:
-            Getting a filename from the user.
             window.getMouse()
             filename = E1.getText()
             file = open(filename)
@@ -35,7 +34,6 @@ def DisplayWindow(window): #main game window
             if othercondition == True:
                 WrongText.undraw()
         except FileNotFoundError: #file not found exception
-            Checking to make sure the filename is valid.
             GreetingText.undraw()
             WrongText = Text( (Point(500, 200)), "The file does not exist. Enter another file name.")
             WrongText.setSize(30)
